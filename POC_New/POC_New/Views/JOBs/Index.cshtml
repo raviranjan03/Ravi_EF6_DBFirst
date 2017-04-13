@@ -1,7 +1,11 @@
-﻿@model IEnumerable<POC_New.Models.JOB>
+﻿@using System.Linq;
+@using System.Data;
+@model IEnumerable<POC_New.Models.JOB>
 
 @{
-    ViewBag.Title = "Index";
+   ViewBag.Title = "Index";
+
+    var grid = new WebGrid(source: Model, canPage: true, rowsPerPage: 15);
 }
 
 <h2>Index</h2>
@@ -9,7 +13,161 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
+
+<div id="gridContent" style="font-family:Arial; padding: 20px;">
+    @grid.GetHtml(tableStyle: "webgrid - table",  
+    headerStyle: "webgrid-header",
+    footerStyle: "webgrid-footer",
+    alternatingRowStyle: "webgrid-alternating-row",
+    selectedRowStyle: "webgrid-selected-row",
+    rowStyle: "webgrid-row-style",
+    mode: WebGridPagerModes.NextPrevious,
+    columns: grid.Columns(
+                grid.Column(columnName:"JOB_TITLE", header:"Job Title", 
+                            format:@<text><span class="display-mode"><label id="lblName">@item.JOB_TITLE</label></span>
+                                    <input type="text" id="Name" value="@item.JOB_TITLE" class="edit-mode"/>
+                                   </text>,
+                            style: "col2Width"),
+                grid.Column(columnName:"MIN_SALARY", header:"Minimum Salary",
+                            format:@<text><span class="display-mode"><label id="lblName">@item.MIN_SALARY</label></span>
+                                    <input type="text" id="min_salary" value="@item.MIN_SALARY" class="edit-mode" />
+                                    </text>,
+                            style: "col2Width"),
+                grid.Column(columnName: "MAX_SALARY", header: "Maximum Salary",
+                            format:@<text><span class="display-mode"><label id="lblName">@item.MAX_SALARY</label></span>
+                            <input type="text" id="max_salary" value="@item.MAX_SALARY" class="edit-mode" />
+                            </text>,
+                            style: "col2Width")
+
+    ))
+</div>
+<script type="text/javascript">
+
+    $(function () {
+        $('.edit-mode').hide();
+        $('.edit-user, .cancel-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            tr.find('.edit-mode, .display-mode').toggle();
+        });
+        $('.save-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            var EmpID = tr.find("#EmpId").html();
+            var EmpName = tr.find("#Name").val();
+            var EmpDesignation = tr.find("#Designation").val();
+            var EmpGender = tr.find("#Gender").val();
+            var EmpCity = tr.find("#City").val();
+            var EmpState = tr.find("#State").val();
+            var EmpZip = tr.find("#Zip").val();
+
+            //Creating Employee JSON object
+            var EmployeeModel =
+            {
+                "Id": EmpID,
+                "Name": EmpName,
+                "Designation": EmpDesignation,
+                "Gender": EmpGender,
+                "City": EmpCity,
+                "State": EmpState,
+                "Zip": EmpZip
+            };
+            //Posting Employee object to controller's Update action method
+            $.ajax({
+                url: '/Employee/Update',
+                data: JSON.stringify(EmployeeModel),
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    tr.find('.edit-mode, .display-mode').toggle();
+                    alert('Record updated Successfully!!');
+                }
+            });
+        });
+
+        $('.edit-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            var EmpID = tr.find("#EmpId").html();
+            var EmpName = tr.find("#Name").val();
+            var EmpDesignation = tr.find("#Designation").val();
+            var EmpGender = tr.find("#Gender").val();
+            var EmpCity = tr.find("#City").val();
+            var EmpState = tr.find("#State").val();
+            var EmpZip = tr.find("#Zip").val();
+
+            tr.find("#lblName").text(EmpName);
+            tr.find("#lblDesignation").text(EmpDesignation);
+            tr.find("#lblGender").text(EmpGender);
+            tr.find("#lblCity").text(EmpCity);
+            tr.find("#lblState").text(EmpState);
+            tr.find("#lblZip").text(EmpZip);
+        });
+    })
+</script> 
+<style type="text/css">
+    .edit-mode {
+    }
+
+    .edit-user {
+    }
+
+        .edit-user display-mode {
+        }
+
+    .save-user edit-mode {
+    }
+
+    .display-mode {
+    }
+
+    .cancel-user {
+    }
+
+    .webgrid-table {
+        font-family: Arial,Helvetica,sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        width: 750px;
+        display: table;
+        border-collapse: collapse;
+        border: solid px #C5C5C5;
+        background-color: white;
+    }
+
+        .webgrid-table td, th {
+            border: 1px solid #C5C5C5;
+            padding: 3px 7px 2px;
+        }
+
+    .webgrid-header, .webgrid-header a {
+        background-color: #0094ff;
+        color: #ffffff;
+        text-align: left;
+        text-decoration: none;
+    }
+
+    .webgrid-footer {
+    }
+
+    .webgrid-row-style {
+        padding: 3px 7px 2px;
+    }
+
+    .webgrid-alternating-row {
+        background-color: azure;
+        padding: 3px 7px 2px;
+    }
+
+    .col1Width {
+        width: 55px;
+    }
+
+    .col2Width {
+        width: 220px;
+    }
+</style>
+
+ 
+
+@*<table class="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.JOB_TITLE)
@@ -42,4 +200,4 @@
     </tr>
 }
 
-</table>
+</table>*@
