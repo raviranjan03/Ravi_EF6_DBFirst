@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelJobStoreContainer" CdmEntityContainer="Entities2">
+    <EntitySetMapping Name="JOBS">
+      <EntityTypeMapping TypeName="ModelJob.JOB">
+        <MappingFragment StoreEntitySet="JOBS">
+          <ScalarProperty Name="JOB_ID" ColumnName="JOB_ID" />
+          <ScalarProperty Name="JOB_TITLE" ColumnName="JOB_TITLE" />
+          <ScalarProperty Name="MIN_SALARY" ColumnName="MIN_SALARY" />
+          <ScalarProperty Name="MAX_SALARY" ColumnName="MAX_SALARY" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

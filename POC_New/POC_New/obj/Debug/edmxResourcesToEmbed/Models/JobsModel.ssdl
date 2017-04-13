@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ModelJob.Store" Provider="Oracle.ManagedDataAccess.Client" ProviderManifestToken="11.2" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="JOBS">
+    <Key>
+      <PropertyRef Name="JOB_ID" />
+    </Key>
+    <Property Name="JOB_ID" Type="varchar2" MaxLength="10" Nullable="false" />
+    <Property Name="JOB_TITLE" Type="varchar2" MaxLength="35" Nullable="false" />
+    <Property Name="MIN_SALARY" Type="number" Precision="6" Scale="0" />
+    <Property Name="MAX_SALARY" Type="number" Precision="6" Scale="0" />
+  </EntityType>
+  <EntityContainer Name="ModelJobStoreContainer">
+    <EntitySet Name="JOBS" EntityType="Self.JOBS" Schema="HR" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

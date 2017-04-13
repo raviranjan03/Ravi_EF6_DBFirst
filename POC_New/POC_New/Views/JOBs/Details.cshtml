@@ -1,0 +1,42 @@
+﻿@model POC_New.Models.JOB
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>JOB</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.JOB_TITLE)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.JOB_TITLE)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MIN_SALARY)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MIN_SALARY)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MAX_SALARY)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MAX_SALARY)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.JOB_ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
