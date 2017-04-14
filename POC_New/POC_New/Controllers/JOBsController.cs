@@ -89,6 +89,33 @@ namespace POC_New.Controllers
             return View(jOB);
         }
 
+
+        [HttpPost]
+        public ActionResult Update(JOB job)
+        {
+            if(ModelState.IsValid)
+            {
+                try
+                {
+                    JOB Ojob = db.JOBS.Single(j => j.JOB_ID == job.JOB_ID);
+                    Ojob.JOB_ID = job.JOB_ID;
+                    Ojob.JOB_TITLE = job.JOB_TITLE;
+                    Ojob.MIN_SALARY = job.MIN_SALARY;
+                    Ojob.MAX_SALARY = job.MAX_SALARY;
+
+                    db.Entry(Ojob).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+                catch(Exception ex)
+                {
+                    Console.Write(ex);
+                }
+                
+            }
+            return RedirectToAction("Index");
+        }
+
+
         // GET: JOBs/Delete/5
         public ActionResult Delete(string id)
         {

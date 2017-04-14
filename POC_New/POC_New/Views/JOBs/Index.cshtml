@@ -1,7 +1,6 @@
-﻿@using System.Linq;
-@using System.Data;
-@model IEnumerable<POC_New.Models.JOB>
+﻿@model IEnumerable<POC_New.Models.JOB>
 
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
 @{
    ViewBag.Title = "Index";
 
@@ -15,7 +14,7 @@
 </p>
 
 <div id="gridContent" style="font-family:Arial; padding: 20px;">
-    @grid.GetHtml(tableStyle: "webgrid - table",  
+    @grid.GetHtml(tableStyle: "webgrid-table",  
     headerStyle: "webgrid-header",
     footerStyle: "webgrid-footer",
     alternatingRowStyle: "webgrid-alternating-row",
@@ -23,9 +22,13 @@
     rowStyle: "webgrid-row-style",
     mode: WebGridPagerModes.NextPrevious,
     columns: grid.Columns(
+                grid.Column(columnName:"JOB_ID", header:"Job ID", 
+                            format:@<text><span class="display-mode"><label id="lbID">@item.JOB_ID</label></span>
+                                    <input type="text" id="job_id" value="@item.JOB_ID" class="edit-mode"/></text>,
+                             style:"col2Width"       ),
                 grid.Column(columnName:"JOB_TITLE", header:"Job Title", 
                             format:@<text><span class="display-mode"><label id="lblName">@item.JOB_TITLE</label></span>
-                                    <input type="text" id="Name" value="@item.JOB_TITLE" class="edit-mode"/>
+                                    <input type="text" id="job_title" value="@item.JOB_TITLE" class="edit-mode"/>
                                    </text>,
                             style: "col2Width"),
                 grid.Column(columnName:"MIN_SALARY", header:"Minimum Salary",
@@ -37,51 +40,60 @@
                             format:@<text><span class="display-mode"><label id="lblName">@item.MAX_SALARY</label></span>
                             <input type="text" id="max_salary" value="@item.MAX_SALARY" class="edit-mode" />
                             </text>,
-                            style: "col2Width")
+                            style: "col2Width"),
+                grid.Column(header: "Action", 
+                            format:@<text>
+                                    <button class="edit-user display-mode">Edit</button>
+                                    <button class="save-user edit-mode">Save</button>
+                                    <button class="cancel-user edit-mode">Cancel</button>
+                            </text>, style: "col1Width")
 
     ))
 </div>
 <script type="text/javascript">
-
+    $(document).ready(function(){
+        $('.edit-mode').hide();
+    });
     $(function () {
         $('.edit-mode').hide();
         $('.edit-user, .cancel-user').on('click', function () {
             var tr = $(this).parents('tr:first');
             tr.find('.edit-mode, .display-mode').toggle();
         });
-        $('.save-user').on('click', function () {
-            var tr = $(this).parents('tr:first');
-            var EmpID = tr.find("#EmpId").html();
-            var EmpName = tr.find("#Name").val();
-            var EmpDesignation = tr.find("#Designation").val();
-            var EmpGender = tr.find("#Gender").val();
-            var EmpCity = tr.find("#City").val();
-            var EmpState = tr.find("#State").val();
-            var EmpZip = tr.find("#Zip").val();
 
-            //Creating Employee JSON object
-            var EmployeeModel =
-            {
-                "Id": EmpID,
-                "Name": EmpName,
-                "Designation": EmpDesignation,
-                "Gender": EmpGender,
-                "City": EmpCity,
-                "State": EmpState,
-                "Zip": EmpZip
-            };
-            //Posting Employee object to controller's Update action method
-            $.ajax({
-                url: '/Employee/Update',
-                data: JSON.stringify(EmployeeModel),
-                type: 'POST',
-                contentType: 'application/json; charset=utf-8',
-                success: function (data) {
-                    tr.find('.edit-mode, .display-mode').toggle();
-                    alert('Record updated Successfully!!');
-                }
-            });
+    $('.save-user').on('click', function () {
+        var tr = $(this).parents('tr:first');
+        var JobID = tr.find("#job_id").val();
+        var JobTitle = tr.find("#job_title").val();
+        var MinSalary = tr.find("#min_salary").val();
+        var MaxSalary = tr.find("#max_salary").val();
+        
+
+        //Creating JOB JSON object
+        var JOBModel =
+        {
+            "JOB_ID": JobID,
+            "JOB_TITLE": JobTitle,
+            "MIN_SALARY": MinSalary,
+            "MAX_SALARY": MaxSalary
+        };
+        //Posting JOBModel object to controller's Update action method
+        $.ajax({
+            url: '/JOBs/Update',
+            data: JSON.stringify(JOBModel),
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                tr.find('.edit-mode, .display-mode').toggle();
+                alert('Record updated Successfully!!');
+            },
+            error: function (xhr, status) {
+                if (xhr.status != 0)
+                    alert("Sorry unable to update record");
+        
+            }
         });
+    });
 
         $('.edit-user').on('click', function () {
             var tr = $(this).parents('tr:first');
@@ -101,7 +113,8 @@
             tr.find("#lblZip").text(EmpZip);
         });
     })
-</script> 
+</script>
+ 
 <style type="text/css">
     .edit-mode {
     }
@@ -109,8 +122,8 @@
     .edit-user {
     }
 
-        .edit-user display-mode {
-        }
+    .edit-user display-mode {
+    }
 
     .save-user edit-mode {
     }
@@ -132,10 +145,10 @@
         background-color: white;
     }
 
-        .webgrid-table td, th {
-            border: 1px solid #C5C5C5;
-            padding: 3px 7px 2px;
-        }
+    .webgrid-table td, th {
+        border: 1px solid #C5C5C5;
+        padding: 4px 7px 8px;
+    }
 
     .webgrid-header, .webgrid-header a {
         background-color: #0094ff;
@@ -157,7 +170,7 @@
     }
 
     .col1Width {
-        width: 55px;
+        width: 200px;
     }
 
     .col2Width {
